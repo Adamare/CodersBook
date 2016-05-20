@@ -11,18 +11,86 @@ use CodersLab\CodersBookBundle\Entity\Person;
 use CodersLab\CodersBookBundle\Entity\CLGroup;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @Route("/person")
+ */
 class PersonController extends Controller {
+
+    private function personForm($person) {
+
+        $form = $this->createFormBuilder($person)
+                ->setAction($this->generateUrl('person_admin_create'))
+                ->add('name', 'text', ['label' => 'Imię i nazwisko'])
+                ->add('email', 'text', ['label' => 'Adres e-mail'])
+                ->add('phone', 'text', ['label' => 'Numer telefonu'])
+                ->add('github', 'text', ['label' => 'Login Github'])
+                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn'])
+                ->add('clGroup', 'entity', [
+                    'label' => 'Grupa',
+                    'class' => 'CodersBookBundle:CLGroup',
+                    'choice_label' => 'name'])
+                ->add('save', 'submit', ['label' => 'Dodaj osobę'])
+                ->getForm();
+        return $form;
+    }
+
     /**
-     * @Route("/showAllPersons", name = "showAllPersons")
+     * @Route("/admin/all/{id}", name = "person_admin_all")
      * @Template()
      */
-    public function showAllPersonsAction() {
+    public function showAllPersonsAction($id) {
         $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:Group');
 
-        $persons = $repo->findAll();
+        $persons = $repo->findBy(['clGroup' => $repoGroup->find($id)]);
         return [
             'persons' => $persons,
-            
         ];
     }
+
+    /**
+     * @Route("/admin/create", name = "person_admin_create")
+     * @Template()
+     */
+    public function createPersonAction(Request $req) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $person = new Person();
+
+        $form = $this->personForm($person);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted()) {
+            if ($repo->findByName($person->getName()) || $person->getName() == '') {
+                return [
+                    'error' => 'Taka osoba już istnieje lub formularz jest pusty!'
+                ];
+            }
+            if (!$person->getClGroup()) {
+                return [
+                    'error' => 'Nie wybrano grupy!'
+                ];
+            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($person);
+            $em->flush();
+
+            return [
+                'person' => $person
+            ];
+        }
+    }
+    /**
+     * @Route("/admin/new", name = "person_admin_new")
+     * @Template()
+     */
+    public function newPersonAction() {
+        $person = new Person();
+
+        $form = $this->personForm($person);
+
+        return [
+            'form' => $form->createView()
+        ];
+    }
+
 }

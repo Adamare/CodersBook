@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        {% if error is defined%}
+            ERROR <a href="{{ path ('person_admin_new') }}">Powrót</a>
+            {% else %}
+                {{ person.name }} <a href="{{ path ('person_admin_all',{ 'id': person.group.id}) }}">Powrót</a>
+        {% endif %}
+    </body>
+</html
