@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        {% if deletedPerson is null %}
+            Nie można było usunąć osoby, ponieważ nie istnieje w bazie.
+            {%else%}
+        Osoba <b>{{ deletedPerson.name }} </b> została usunięta.
+        {% endif %}
+    </body>
+</htm

@@ -40,7 +40,7 @@ class PersonController extends Controller {
      */
     public function showAllPersonsAction($id) {
         $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
-        $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:Group');
+        $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
 
         $persons = $repo->findBy(['clGroup' => $repoGroup->find($id)]);
         return [
@@ -90,6 +90,25 @@ class PersonController extends Controller {
 
         return [
             'form' => $form->createView()
+        ];
+    }
+    
+    /**
+     * @Route("/admin/delete/{id}", name = "person_admin_delete")
+     * @Template()
+     */
+    public function deletePersonAction($id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $em = $this->getDoctrine()->getManager();
+        $deletedPerson = $repo->find($id);
+
+        if ($deletedPerson) {
+            $em->remove($deletedPerson);
+            $em->flush();
+        }
+
+        return [
+            'deletedPerson' => $deletedPerson
         ];
     }
 
