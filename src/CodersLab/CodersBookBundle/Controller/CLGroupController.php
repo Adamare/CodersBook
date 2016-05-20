@@ -84,5 +84,39 @@ class CLGroupController extends Controller {
             return [];
         }
     }
+    
+    /**
+     * @Route("/admin/delete/{id}")
+     * @Template()
+     * @Method("GET")
+     */
+    public function deleteGroupAction($id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
+        $groups = $repo->findAll();
+        
+        return [
+            'groups'=>$groups
+        ];
+    }
+    
+    /**
+     * @Route("/admin/delete/{id}")
+     * @Template()
+     * @Method("POST")
+     */
+    public function delete2GroupAction(Request $req, $id) {
+        
+        $selectedGroupId = $req->request->get('selectedGroup');
+        
+        if ($id == $selectedGroupId) {
+            return [
+                'error'=>'Wybierz inną grupę'
+            ];
+        }
+        
+        
+        
+        
+    }
 
 }
