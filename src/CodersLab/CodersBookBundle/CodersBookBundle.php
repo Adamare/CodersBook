@@ -4,6 +4,6 @@ namespace CodersLab\CodersBookBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class CodersLabCodersBookBundle extends Bundle
+class CodersBookBundle extends Bundle
 {
 }
