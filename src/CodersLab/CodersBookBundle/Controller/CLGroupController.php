@@ -32,8 +32,8 @@ class CLGroupController extends Controller {
     public function groupForm($group) {
         $form = $this->createFormBuilder($group)
                 ->setAction($this->generateUrl('group_admin_create'))
-                ->add('name', 'text')
-                ->add('lecturer', 'text')
+                ->add('name', 'text', ['label' => 'Nazwa grupy'])
+                ->add('lecturer', 'text', ['label' => 'Wykładowca'])
                 ->add('save', 'submit', ['label' => 'Dodaj grupę'])
                 ->getForm();
         return $form;
