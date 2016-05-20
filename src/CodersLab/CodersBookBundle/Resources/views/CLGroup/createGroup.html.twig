@@ -1,0 +1,6 @@
+{% if error is defined %}
+    {{ error }}<br>
+    <a href="{{ path('group_admin_new') }}">Dodaj jeszcze raz</a>
+{% else %}
+    <a href="{{ path('group_admin_all') }}">Strona główna</a>
+{% endif%}
