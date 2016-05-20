@@ -102,37 +102,4 @@ class CLGroup
     {
         return $this->lecturer;
     }
-
-    /**
-     * Add persons
-     *
-     * @param \CodersLab\CodersBookBundle\Entity\Person $persons
-     * @return CLGroup
-     */
-    public function addPerson(\CodersLab\CodersBookBundle\Entity\Person $persons)
-    {
-        $this->persons[] = $persons;
-
-        return $this;
-    }
-
-    /**
-     * Remove persons
-     *
-     * @param \CodersLab\CodersBookBundle\Entity\Person $persons
-     */
-    public function removePerson(\CodersLab\CodersBookBundle\Entity\Person $persons)
-    {
-        $this->persons->removeElement($persons);
-    }
-
-    /**
-     * Get persons
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPersons()
-    {
-        return $this->persons;
-    }
 }
