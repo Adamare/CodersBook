@@ -1,3 +1,4 @@
-app:
-    resource: "@AppBundle/Controller/"
+coders_lab_coders_book:
+    resource: "@CodersLabCodersBookBundle/Controller/"
     type:     annotation
+    prefix:   /
