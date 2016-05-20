@@ -1,4 +1,6 @@
-AAprojekt
+CodersBook
 =========
 
-A Symfony project created on May 20, 2016, 2:24 pm.
+Platforma do zarządzania CV i linkami programistycznymi kursantów Coders Lab.
+
+Readme wkrótce.
