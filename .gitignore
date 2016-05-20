@@ -46,5 +46,7 @@
 # Composer PHAR
 /composer.phar
 
+/README.md
+
 # Backup entities generated with doctrine:generate:entities command
 */Entity/*~
