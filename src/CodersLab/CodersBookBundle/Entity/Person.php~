@@ -178,27 +178,4 @@ class Person {
         return $this->linkedin;
     }
 
-
-    /**
-     * Set clGroup
-     *
-     * @param \CodersLab\CodersBookBundle\Entity\CLGroup $clGroup
-     * @return Person
-     */
-    public function setClGroup(\CodersLab\CodersBookBundle\Entity\CLGroup $clGroup = null)
-    {
-        $this->clGroup = $clGroup;
-
-        return $this;
-    }
-
-    /**
-     * Get clGroup
-     *
-     * @return \CodersLab\CodersBookBundle\Entity\CLGroup 
-     */
-    public function getClGroup()
-    {
-        return $this->clGroup;
-    }
 }
