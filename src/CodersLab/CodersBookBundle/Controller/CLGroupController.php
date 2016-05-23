@@ -116,23 +116,28 @@ class CLGroupController extends Controller {
         }
 
         $repoClGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
-        $clGroupOld = $repo->find($id);
-        $clGroupNew = $repo->find($selectedGroupId);
+        $clGroupOld = $repoClGroup->find($id);
+        $clGroupNew = $repoClGroup->find($selectedGroupId);
 
         $repoPerson = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
         $em = $this->getDoctrine()->getManager();
 
-        if ($clGroupOld && $clGroupNew) {
-            $persons = $repo->findByClGroup($clGroupOld);
-
-            foreach ($persons as $person) {
-                $person->setClGroup($clGroupNew);
-            }
-            
-            $em->remove($clGroupOld);
-            $em->flush();
+        if (!$clGroupOld || !$clGroupNew) {
+            return [
+                'error' => 'Wybrana lub docelowa grupa nie istnieje'
+            ];
         }
         
+        $persons = $repoPerson->findByClGroup($clGroupOld);
+
+        foreach ($persons as $person) {
+            $person->setClGroup($clGroupNew);
+        }
+
+        $em->remove($clGroupOld);
+        $em->flush();
+
+
         return[];
     }
 
