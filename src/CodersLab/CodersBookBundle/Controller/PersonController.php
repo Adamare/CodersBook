@@ -33,9 +33,26 @@ class PersonController extends Controller {
                 ->getForm();
         return $form;
     }
+    private function updatePersonForm($person) {
+
+        $form = $this->createFormBuilder($person)
+                ->add('name', 'text', ['label' => 'Imię i nazwisko'])
+                ->add('email', 'text', ['label' => 'Adres e-mail'])
+                ->add('phone', 'text', ['label' => 'Numer telefonu'])
+                ->add('github', 'text', ['label' => 'Login Github'])
+                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn'])
+                ->add('clGroup', 'entity', [
+                    'label' => 'Grupa',
+                    'class' => 'CodersBookBundle:CLGroup',
+                    'choice_label' => 'name'])
+                ->add('save', 'submit', ['label' => 'Zapisz zmiany'])
+                ->getForm();
+        return $form;
+    }
+
 
     /**
-     * @Route("/admin/all/{id}", name = "person_admin_all")
+     * @Route("/all/{id}", name = "person_admin_all")
      * @Template()
      */
     public function showAllPersonsAction($id) {
@@ -111,5 +128,41 @@ class PersonController extends Controller {
             'deletedPerson' => $deletedPerson
         ];
     }
+    /**
+     * @Route("/admin/update/{id}", name = "person_admin_update")
+     * @Method("GET")
+     * @Template()
+     */
+    public function updatePersonGetAction($id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        
+        $person = $repo->find($id);
+        if ($person) {
+            $form = $this->updatePersonForm($person, $person->getId());
+        }
+        return[
+            'form' => $form->createView()
+        ];
+    }
+    /**
+     * @Route("/admin/update/{id}", name = "person_admin_save")
+     * @Method("POST")
+     * @Template("CodersBookBundle:Person:updatePersonGet.html.twig")
+     */
+    public function updatePersonPostAction(Request $req, $id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $person = $repo->find($id);
+        $form = $this->updatePersonForm($person, $person->getId());
+        $form->handleRequest($req);
 
+        if ($form->isSubmitted()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($person);
+            $em->flush();
+        }
+        return [
+            'form' => $form->createView(),
+            'success' => true
+        ];
+    }
 }
