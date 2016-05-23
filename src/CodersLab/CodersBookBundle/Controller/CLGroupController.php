@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use CodersLab\CodersBookBundle\Entity\CLGroup;
+use CodersLab\CodersBookBundle\Entity\Person;
 
 /**
  * @Route("/group")
@@ -84,7 +85,7 @@ class CLGroupController extends Controller {
             return [];
         }
     }
-    
+
     /**
      * @Route("/admin/delete/{id}")
      * @Template()
@@ -93,30 +94,46 @@ class CLGroupController extends Controller {
     public function deleteGroupAction($id) {
         $repo = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
         $groups = $repo->findAll();
-        
+
         return [
-            'groups'=>$groups
+            'groups' => $groups
         ];
     }
-    
+
     /**
      * @Route("/admin/delete/{id}")
      * @Template()
      * @Method("POST")
      */
     public function delete2GroupAction(Request $req, $id) {
-        
+
         $selectedGroupId = $req->request->get('selectedGroup');
-        
+
         if ($id == $selectedGroupId) {
             return [
-                'error'=>'Wybierz inną grupę'
+                'error' => 'Wybierz inną grupę'
             ];
         }
+
+        $repoClGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
+        $clGroupOld = $repo->find($id);
+        $clGroupNew = $repo->find($selectedGroupId);
+
+        $repoPerson = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $em = $this->getDoctrine()->getManager();
+
+        if ($clGroupOld && $clGroupNew) {
+            $persons = $repo->findByClGroup($clGroupOld);
+
+            foreach ($persons as $person) {
+                $person->setClGroup($clGroupNew);
+            }
+            
+            $em->remove($clGroupOld);
+            $em->flush();
+        }
         
-        
-        
-        
+        return[];
     }
 
 }
