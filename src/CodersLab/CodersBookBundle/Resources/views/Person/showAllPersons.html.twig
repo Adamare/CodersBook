@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
     <body>
-        Oto osoby które są w grupie:<br>
-        
+        {% if error is not defined %}
+            Oto osoby które są w grupie {{clGroup.name }}:<br>
+
             {% for person in persons %}
-                
-                    Imię i nazwisko: {{ person.name }}, e-mail: {{ person.email }}, tel: {{ person.phone }} <br>
-                    Konto na Github: <a href="https://github.com/{{ person.github }}">Profil Github</a><br>
-                    Konto na LinkedIn: <a href="https://pl.linkedin.com/in/{{ person.linkedin }}">Profil LinkedIn</a><br>
-                     <a href="{{ path ('person_admin_delete', {'id': person.id}) }}">Usuń osobę</a><br>
-                    <hr>
-                
+
+                Imię i nazwisko: {{ person.name }}, e-mail: {{ person.email }}, tel: {{ person.phone }} <br>
+                Konto na Github: <a href="https://github.com/{{ person.github }}">Profil Github</a><br>
+                Konto na LinkedIn: <a href="https://pl.linkedin.com/in/{{ person.linkedin }}">Profil LinkedIn</a><br>
+                <a href="{{ path ('person_admin_delete', {'id': person.id}) }}">Usuń osobę</a><br>
+                <a href="{{ path ('person_admin_update', {'id': person.id}) }}">Edytuj dane</a><br>
+                <hr>
+
             {% endfor %}
-        
+        {% else %}
+            {{ error }}
+        {% endif %}
+
     </body>
-</html
+</html>

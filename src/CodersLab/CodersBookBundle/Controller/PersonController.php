@@ -58,10 +58,18 @@ class PersonController extends Controller {
     public function showAllPersonsAction($id) {
         $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
         $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
-
-        $persons = $repo->findBy(['clGroup' => $repoGroup->find($id)]);
+        
+        $group = $repoGroup->find($id);
+        if (!$group){
+            return [
+                'error' => 'Nie ma takiej grupy'
+            ];
+        }
+        $persons = $repo->findBy(['clGroup' => $group]);
+        
         return [
             'persons' => $persons,
+            'clGroup' => $group
         ];
     }
 
