@@ -39,6 +39,15 @@ class CLGroupController extends Controller {
                 ->getForm();
         return $form;
     }
+    
+    public function updateGroupForm($group) {
+        $form = $this->createFormBuilder($group)
+                ->add('name', 'text', ['label' => 'Nazwa grupy'])
+                ->add('lecturer', 'text', ['label' => 'Wykładowca'])
+                ->add('save', 'submit', ['label' => 'Zmień grupę'])
+                ->getForm();
+        return $form;
+    }
 
     /**
      * @Route("/admin/new", name="group_admin_new")
@@ -140,5 +149,43 @@ class CLGroupController extends Controller {
 
         return[];
     }
+    
+    /**
+     * @Route("/admin/update/{id}")
+     * @Template("CodersBookBundle:CLGroup:newGroup.html.twig")
+     * @Method("GET")
+     */
+    public function updateGetAction($id) {
+        
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
 
+        $group = $repo->find($id);
+        
+        if ($group) {
+            $form = $this->updateGroupForm($group);
+        }
+        return[
+            'form' => $form->createView()
+        ];
+    }
+        
+        /**
+     * @Route("/admin/update/{id}")
+     * @Template("CodersBookBundle:CLGroup:newGroup.html.twig")
+     * @Method("POST")
+     */
+    public function updatePostAction(Request $req, $id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
+        $group = $repo->find($id);
+        $form = $this->updateGroupForm($group);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+        }
+        return [
+            'form' => $form->createView(),
+        ];
+    }
 }
