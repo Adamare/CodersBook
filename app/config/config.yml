@@ -7,6 +7,11 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: CodersLab\CodersBookBundle\Entity\User
 
 framework:
     #esi:             ~

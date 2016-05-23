@@ -52,14 +52,14 @@ class PersonController extends Controller {
 
 
     /**
-     * @Route("/all/{id}", name = "person_admin_all")
+     * @Route("/all/{name}", name = "person_admin_all")
      * @Template()
      */
-    public function showAllPersonsAction($id) {
+    public function showAllPersonsAction($name) {
         $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
         $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
         
-        $group = $repoGroup->find($id);
+        $group = $repoGroup->findOneByName($name);
         if (!$group){
             return [
                 'error' => 'Nie ma takiej grupy'
