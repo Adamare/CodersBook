@@ -1,6 +1,6 @@
 <form action="" method="POST">
     Wybierz grupę do której chcesz przenieść osoby z usuwanej grupy:
-    <select>
+    <select name="selectedGroup">
         {% for group in groups %}
         <option value="{{group.id}}">{{ group.name }}</option>
         {% endfor %}
