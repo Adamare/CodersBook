@@ -1,30 +1,30 @@
-<!DOCTYPE html>
-<html>
-    <body>
-        {% if error is not defined %}
-            Oto osoby które są w grupie {{clGroup.name }}:<br>
+{% extends "CodersBookBundle::base.html.twig" %}
 
-            {% for person in persons %}
+{% block title %} ShowAll  {% endblock %}
 
-                Imię i nazwisko: {{ person.name }}, e-mail: {{ person.email }}, tel: {{ person.phone }} <br>
-                {% if person.github is empty %}
-                    Konto na Github: - <br>
-                {% else %}
-                    Konto na Github: <a href="https://github.com/{{ person.github }}">{{ person.github }}</a><br>
-                {% endif %}
-                {% if person.linkedin is empty %}
-                    Konto na LinkedIn: - <br>
-                {% else %}
-                    Konto na LinkedIn: <a href="https://pl.linkedin.com/in/{{ person.linkedin }}">{{ person.linkedin }}</a><br>               
-                {% endif %}
-                <a href="{{ path ('person_admin_delete', {'id': person.id}) }}">Usuń osobę</a><br>
-                <a href="{{ path ('person_admin_update', {'id': person.id}) }}">Edytuj dane</a><br>
-                <hr>
+{% block content %}
+    {% if error is not defined %}
+        Oto osoby które są w grupie {{clGroup.name }}:<br>
 
-            {% endfor %}
-        {% else %}
-            {{ error }}
-        {% endif %}
+        {% for person in persons %}
 
-    </body>
-</html>
+            Imię i nazwisko: {{ person.name }}, e-mail: {{ person.email }}, tel: {{ person.phone }} <br>
+            {% if person.github is empty %}
+                Konto na Github: - <br>
+            {% else %}
+                Konto na Github: <a href="https://github.com/{{ person.github }}">{{ person.github }}</a><br>
+            {% endif %}
+            {% if person.linkedin is empty %}
+                Konto na LinkedIn: - <br>
+            {% else %}
+                Konto na LinkedIn: <a href="https://pl.linkedin.com/in/{{ person.linkedin }}">{{ person.linkedin }}</a><br>               
+            {% endif %}
+            <a href="{{ path ('person_admin_delete', {'id': person.id}) }}">Usuń osobę</a><br>
+            <a href="{{ path ('person_admin_update', {'id': person.id}) }}">Edytuj dane</a><br>
+            <hr>
+
+        {% endfor %}
+    {% else %}
+        {{ error }}
+    {% endif %}
+{% endblock %}

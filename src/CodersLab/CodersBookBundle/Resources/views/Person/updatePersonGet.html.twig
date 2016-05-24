@@ -1,6 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <body>
+{% extends "CodersBookBundle::base.html.twig" %}
+
+{% block title %} Update person {% endblock %}
+
+{% block content %}
         {%if error is defined %}
             Nie ma takiej osoby w bazie danych!
         {%else %}
@@ -11,5 +13,4 @@
             {{form_widget(form)}}
             {{form_end(form)}}
         {% endif %}
-    </body>
-</html>
+{% endblock %}
