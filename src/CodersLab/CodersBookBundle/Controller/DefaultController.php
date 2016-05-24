@@ -28,23 +28,26 @@ class DefaultController extends Controller {
      * @Template("CodersBookBundle:Default:newAdmin.html.twig")
      */
     public function createAdminAction(Request $req) {
+        $userManager = $this->get('fos_user.user_manager');
+        $admin = $userManager->createUser();
+
         $code = $this->getParameter('admin_create_access_code');
         $userCode = $req->request->get('code');
-
-
-        if ($userCode != $code) {
-            return new Response('Access denied!');
-         
-        }
-        
-
         $username = $req->request->get('login');
         $password = $req->request->get('pass');
         $email = $req->request->get('mail');
 
-        $userManager = $this->get('fos_user.user_manager');
-        $admin = $userManager->createUser();
 
+        if ($userCode != $code) {
+            return new Response('Access denied!');
+        }
+        if ($userManager->findUserByUsername($username)){
+            return new Response('This username already exists');
+        }
+        if ($userManager->findUserByEmail($email)){
+            return new Response('This email already exists');
+        }
+            
         $admin->setUsername($username);
         $admin->setEmail($email);
         $admin->setPassword($password);
