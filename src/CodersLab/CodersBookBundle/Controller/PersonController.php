@@ -33,6 +33,7 @@ class PersonController extends Controller {
                 ->getForm();
         return $form;
     }
+
     private function updatePersonForm($person) {
 
         $form = $this->createFormBuilder($person)
@@ -50,7 +51,6 @@ class PersonController extends Controller {
         return $form;
     }
 
-
     /**
      * @Route("/all/{name}", name = "person_admin_all")
      * @Template()
@@ -58,15 +58,15 @@ class PersonController extends Controller {
     public function showAllPersonsAction($name) {
         $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
         $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
-        
+
         $group = $repoGroup->findOneByName($name);
-        if (!$group){
+        if (!$group) {
             return [
                 'error' => 'Nie ma takiej grupy'
             ];
         }
         $persons = $repo->findBy(['clGroup' => $group]);
-        
+
         return [
             'persons' => $persons,
             'clGroup' => $group
@@ -104,6 +104,7 @@ class PersonController extends Controller {
             ];
         }
     }
+
     /**
      * @Route("/admin/new", name = "person_admin_new")
      * @Template()
@@ -117,7 +118,7 @@ class PersonController extends Controller {
             'form' => $form->createView()
         ];
     }
-    
+
     /**
      * @Route("/admin/delete/{id}", name = "person_admin_delete")
      * @Template()
@@ -136,6 +137,7 @@ class PersonController extends Controller {
             'deletedPerson' => $deletedPerson
         ];
     }
+
     /**
      * @Route("/admin/update/{id}", name = "person_admin_update")
      * @Method("GET")
@@ -143,15 +145,19 @@ class PersonController extends Controller {
      */
     public function updatePersonGetAction($id) {
         $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
-        
+
         $person = $repo->find($id);
-        if ($person) {
-            $form = $this->updatePersonForm($person, $person->getId());
+        if (!$person) {
+            return [
+                'error' => 'Wystąpił błąd brak takiej osoby w bazie danych!'
+            ];
         }
+        $form = $this->updatePersonForm($person); 
         return[
             'form' => $form->createView()
         ];
     }
+
     /**
      * @Route("/admin/update/{id}", name = "person_admin_save")
      * @Method("POST")
@@ -173,4 +179,5 @@ class PersonController extends Controller {
             'success' => true
         ];
     }
+
 }

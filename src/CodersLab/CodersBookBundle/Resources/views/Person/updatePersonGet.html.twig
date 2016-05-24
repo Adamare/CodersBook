@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
     <body>
-        {% if success is defined %}
-            Success!
-         {% endif %}
+        {%if error is defined %}
+            Nie ma takiej osoby w bazie danych!
+        {%else %}
+            {% if success is defined %}
+                Success!
+            {% endif %}
             {{form_start(form)}}
             {{form_widget(form)}}
             {{form_end(form)}}
-     </body>
+        {% endif %}
+    </body>
 </html>

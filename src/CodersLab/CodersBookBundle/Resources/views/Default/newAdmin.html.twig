@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html>
+    <body>
+        {% if admin is defined %}
+            Success! Admin {{ admin.username }} created!
+        {% endif %}
+        <form action="" method="POST">
+            Login Admin:<br>
+            <input type="text" name="login" placeholder="Your Login"/><br>
+            Password:<br>
+            <input type="password" name="pass" placeholder="Password"/><br>
+            E-mail:<br>
+            <input type="email" name="mail" placeholder="E-mail address"/><br>
+            Authorization code:<br>
+            <input type="password" name="code" placeholder="Your authorization code"/><br>
+            <input type="submit" value="Add"/>
+        </form>
+    </body>
+</html>
