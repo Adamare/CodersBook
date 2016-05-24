@@ -1,0 +1,13 @@
+{% extends "CodersBookBundle::base.html.twig" %}
+
+{% block title %} Search Results {% endblock %}
+
+{% block content %}
+    {% if error is not defined %}
+        {% for result in results %}
+            {{ result }}<br>
+        {% endfor %}
+    {% else %}
+        {{ error }}
+    {% endif %}
+{% endblock %}

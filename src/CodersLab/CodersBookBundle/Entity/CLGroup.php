@@ -23,6 +23,10 @@ class CLGroup
         $this->persons = new ArrayCollection();
     }
     
+    public function __toString() {
+        return 'grupa:' .$this->name;
+    }
+    
     /**
      * @var integer
      *
