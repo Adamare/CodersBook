@@ -50,7 +50,7 @@ class DefaultController extends Controller {
             
         $admin->setUsername($username);
         $admin->setEmail($email);
-        $admin->setPassword($password);
+        $admin->setPlainPassword($password);
         $admin->setEnabled(true);
 
         $em = $this->getDoctrine()->getManager();

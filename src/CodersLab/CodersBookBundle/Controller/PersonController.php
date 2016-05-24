@@ -16,15 +16,28 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PersonController extends Controller {
 
+    public function upload() {
+
+
+        $form = $this->createFormBuilder()
+                ->add('cv', 'file', ['label' => 'Twoje CV'])
+                ->add('image', 'file', ['label' => 'Twoje zdjęcie'])
+                ->add('save', 'submit', ['label' => 'Wyślij plik'])
+                ->getForm();
+
+        return $form;
+    }
+
     private function personForm($person) {
+
 
         $form = $this->createFormBuilder($person)
                 ->setAction($this->generateUrl('person_admin_create'))
                 ->add('name', 'text', ['label' => 'Imię i nazwisko'])
                 ->add('email', 'text', ['label' => 'Adres e-mail'])
                 ->add('phone', 'text', ['label' => 'Numer telefonu'])
-                ->add('github', 'text', ['label' => 'Login Github'])
-                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn'])
+                ->add('github', 'text', ['label' => 'Login Github', 'required' => false])
+                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn', 'required' => false])
                 ->add('clGroup', 'entity', [
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
@@ -40,8 +53,8 @@ class PersonController extends Controller {
                 ->add('name', 'text', ['label' => 'Imię i nazwisko'])
                 ->add('email', 'text', ['label' => 'Adres e-mail'])
                 ->add('phone', 'text', ['label' => 'Numer telefonu'])
-                ->add('github', 'text', ['label' => 'Login Github'])
-                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn'])
+                ->add('github', 'text', ['label' => 'Login Github', 'required' => false])
+                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn', 'required' => false])
                 ->add('clGroup', 'entity', [
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
@@ -152,7 +165,7 @@ class PersonController extends Controller {
                 'error' => 'Wystąpił błąd brak takiej osoby w bazie danych!'
             ];
         }
-        $form = $this->updatePersonForm($person); 
+        $form = $this->updatePersonForm($person);
         return[
             'form' => $form->createView()
         ];
@@ -177,6 +190,40 @@ class PersonController extends Controller {
         return [
             'form' => $form->createView(),
             'success' => true
+        ];
+    }
+
+    /**
+     * @Route("/admin/upload/{id}", name = "person_admin_upload")
+     * @Template()
+     */
+    public function uploadPersonAction(Request $req, $id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $person = $repo->find($id);
+
+        $form = $this->upload();
+        $form->handleRequest($req);
+        $dir = $this->container->getParameter('kernel.root_dir') . '/../web/uploads';
+
+        if ($form->isSubmitted()) {
+            $cv = $form->get('cv')->getData();
+            $cvName = md5(uniqid()) . '.' . $cv->guessExtension();
+            $image = $form->get('image')->getData();
+            $imageName = md5(uniqid()) . '.' . $image->guessExtension();
+
+            $cv->move($dir, $cvName);
+            $image->move($dir, $imageName);
+
+            $person->setImageFN($imageName);
+            $person->setCvFN($cvName);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($person);
+            $em->flush();
+        }
+
+        return [
+            'form' => $form->createView()
         ];
     }
 

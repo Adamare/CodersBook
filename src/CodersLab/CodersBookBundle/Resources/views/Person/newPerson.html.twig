@@ -1,8 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <body>
+{% extends "CodersBookBundle::base.html.twig" %}
+
+{% block title %} New Person {% endblock %}
+
+{% block content %}
             {{form_start(form)}}
             {{form_widget(form)}}
             {{form_end(form)}}
-    </body>
-</html
+{% endblock %}
