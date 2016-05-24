@@ -86,6 +86,10 @@ class Person {
     public function __construct() {
         $this->imageFN = '';
         $this->cvFN = '';
+        $this->email = '';
+        $this->phone = '';
+        $this->github = '';
+        $this->linkedin = '';
     }
     /**
      * Get id

@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use CodersLab\CodersBookBundle\Entity\Person;
 use CodersLab\CodersBookBundle\Entity\CLGroup;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * @Route("/person")
@@ -65,8 +67,8 @@ class PersonController extends Controller {
         $form = $this->createFormBuilder($person)
                 ->setAction($this->generateUrl('person_admin_create'))
                 ->add('name', 'text', ['label' => 'Imię i nazwisko'])
-                ->add('email', 'text', ['label' => 'Adres e-mail'])
-                ->add('phone', 'text', ['label' => 'Numer telefonu'])
+                ->add('email', 'text', ['label' => 'Adres e-mail', 'required' => false])
+                ->add('phone', 'text', ['label' => 'Numer telefonu', 'required' => false])
                 ->add('github', 'text', ['label' => 'Login Github', 'required' => false])
                 ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn', 'required' => false])
                 ->add('clGroup', 'entity', [
@@ -82,8 +84,8 @@ class PersonController extends Controller {
 
         $form = $this->createFormBuilder($person)
                 ->add('name', 'text', ['label' => 'Imię i nazwisko'])
-                ->add('email', 'text', ['label' => 'Adres e-mail'])
-                ->add('phone', 'text', ['label' => 'Numer telefonu'])
+                ->add('email', 'text', ['label' => 'Adres e-mail', 'required' => false])
+                ->add('phone', 'text', ['label' => 'Numer telefonu', 'required' => false])
                 ->add('github', 'text', ['label' => 'Login Github', 'required' => false])
                 ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn', 'required' => false])
                 ->add('clGroup', 'entity', [
@@ -250,6 +252,27 @@ class PersonController extends Controller {
         return [
             'form' => $form->createView()
         ];
+    }
+
+    /**
+     * @Route("/admin/download/{id}", name = "person_admin_download")
+     * 
+     */
+    public function downloadPersonAction($id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $person = $repo->find($id);
+        $cvName = $person->getCvFN();
+        $file = $this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $cvName;
+
+        $response = new BinaryFileResponse($file);
+        $response->headers->set('Content-Type', 'application/octet-stream');
+
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
+
+        $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT, $person->getName() . '.' . $ext
+        );
+        return $response;
     }
 
 }
