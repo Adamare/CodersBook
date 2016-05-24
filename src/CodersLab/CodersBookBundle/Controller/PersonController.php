@@ -23,8 +23,8 @@ class PersonController extends Controller {
                 ->add('name', 'text', ['label' => 'Imię i nazwisko'])
                 ->add('email', 'text', ['label' => 'Adres e-mail'])
                 ->add('phone', 'text', ['label' => 'Numer telefonu'])
-                ->add('github', 'text', ['label' => 'Login Github'])
-                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn'])
+                ->add('github', 'text', ['label' => 'Login Github', 'required' => false])
+                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn', 'required' => false])
                 ->add('clGroup', 'entity', [
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
@@ -40,8 +40,8 @@ class PersonController extends Controller {
                 ->add('name', 'text', ['label' => 'Imię i nazwisko'])
                 ->add('email', 'text', ['label' => 'Adres e-mail'])
                 ->add('phone', 'text', ['label' => 'Numer telefonu'])
-                ->add('github', 'text', ['label' => 'Login Github'])
-                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn'])
+                ->add('github', 'text', ['label' => 'Login Github', 'required' => false])
+                ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn', 'required' => false])
                 ->add('clGroup', 'entity', [
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
