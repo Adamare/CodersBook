@@ -14,7 +14,20 @@
                 <i class="material-icons">add</i> Dodaj nową osobę
             </a>
         </div>
+                
+            <form action="#" class="w100 text-center mrg10a" onsubmit="return false;">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                <label class="mdl-button mdl-js-button mdl-button--icon" for="shareLink">
+                  <i class="material-icons">share</i>
+                </label>
+                <div class="mdl-textfield__expandable-holder">
+                  <input class="mdl-textfield__input" type="text" id="shareLink"  readonly="readonly" onclick="this.select();this.focus();" value="{{ url('group_admin', {'name':clGroup.name}) }}">
+                  <label class="mdl-textfield__label" for="shareLink">Pobierz link do udostępnienia</label>
+                </div>
+            </div>
+        </form>
 
+        <div class="responsive-table">
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp w100">
             <thead>
               <tr>
@@ -33,7 +46,7 @@
                 <tr>            
                     <td class="mdl-data-table__cell--non-numeric">
                         {% if person.imageFN is not empty %}
-                            <div style="background-image:url('{{ person.imageFN }}')" class="avatar middle"></div>
+                            <div style="background-image:url('/uploads/{{ person.imageFN }}')" class="avatar middle"></div>
                         {% else %}
                             <i class="material-icons middle">person</i>
                         {% endif %}    
@@ -69,7 +82,7 @@
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">
                         {% if person.cvFN is not empty %}
-                            <a href="..." class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            <a href="{{ path ('person_admin_download', {'id': person.id}) }}" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                 <i class="material-icons">file_download</i> Pobierz CV
                             </a>
                         {% else %}
@@ -77,7 +90,7 @@
                         {% endif %}
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">                          
-                        <a id="upload{{person.id}}Person" href="{{ path ('person_admin_update', {'id': person.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                        <a id="upload{{person.id}}Person" href="{{ path ('person_admin_upload', {'id': person.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                           <i class="material-icons">file_upload</i>
                         </a>
                         <div class="mdl-tooltip mdl-tooltip--large" for="upload{{person.id}}Person">
@@ -105,6 +118,7 @@
         </tbody>
         
     </table>
+    </div>
                 
     <div class="w100 text-center mrg10a">
         <a href="{{ path('person_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">

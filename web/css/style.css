@@ -50,3 +50,8 @@
     background-position: center center;
     display: inline-block;
 }
+
+.responsive-table{
+    overflow-y: auto;
+    width:100%;
+}
