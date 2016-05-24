@@ -12,4 +12,14 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class CLGroupRepository extends EntityRepository {
+    
+    public function searchAllGroups ($text) {
+        
+        $em = $this->getEntityManager();
+        
+        $query = $em->createQuery('SELECT clgroup FROM CodersBookBundle:CLGroup clgroup'
+                . ' WHERE clgroup.name LIKE :text OR clgroup.lecturer LIKE :text')->setParameter('text', '%' . $text .'%');
+        
+        return $query->getResult();
+    }
 }

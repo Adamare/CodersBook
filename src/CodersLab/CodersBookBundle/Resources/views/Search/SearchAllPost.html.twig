@@ -3,9 +3,13 @@
 {% block title %} Search Results {% endblock %}
 
 {% block content %}
+    
     {% if error is not defined %}
-        {% for result in results %}
+        {% for result in searchedGroups %}
             {{ result }}<br>
+        {% endfor %}
+        {% for result2 in searchedPeople %}
+            {{ result2 }}<br>
         {% endfor %}
     {% else %}
         {{ error }}

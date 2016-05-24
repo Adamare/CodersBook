@@ -7,8 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use CodersLabBundle\Entity\CLGroup;
-use CodersLabBundle\Entity\Person;
+use CodersBookBundle\Entity\PersonRepository;
+use CodersBookBundle\Entity\CLGroupRepository;
 
 class SearchController extends Controller {
     
@@ -28,27 +28,20 @@ class SearchController extends Controller {
      */
     public function searchAllPostAction(Request $req) {
         
-        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
-        $em = $this->getDoctrine()->getManager();
-        $searchingText = $req->request->get('inserted_text');
+        $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
+        $repoPeople = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
         
-        $query = $em->createQuery('SELECT clgroup, person FROM CodersBookBundle:CLGroup clgroup, CodersBookBundle:Person  person'
-                . ' WHERE clgroup.name LIKE :text OR clgroup.lecturer LIKE :text '
-                . ' OR person.name LIKE :text'
-                . ' OR person.email LIKE :text'
-                . ' OR person.phone LIKE :text'
-                . ' OR person.github LIKE :text'
-                . ' OR person.linkedin LIKE :text')->setParameter('text', '%' . $searchingText .'%');
+        $searchedGroups = $repoGroup->searchAllGroups($req->request->get('inserted_text'));
+        $searchedPeople = $repoPeople->searchAllPeople($req->request->get('inserted_text'));
         
-        $results = $query->getResult();
-        
-        if(!$results) {
+        if(!$searchedGroups && !$searchedPeople) {
             return [
                 'error'=>'Brak wyników'
             ];
         }
         return [
-            'results'=>$results
+            'searchedGroups'=>$searchedGroups,
+            'searchedPeople'=>$searchedPeople
                 ];
     }
 }

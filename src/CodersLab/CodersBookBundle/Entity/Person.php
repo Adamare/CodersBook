@@ -14,7 +14,7 @@ class Person {
     
     
     public function __toString() {
-        return 'Osoba:' .$this->name;
+        return 'Osoba: ' .$this->name;
     }
     
     /**
