@@ -1,4 +1,6 @@
 {% for group in groups %}
-    Grupa: {{group.name}}<br>
+    Grupa: {{group.name}}<br>   
     Wykładowca: {{group.lecturer}}<br>
+    <a href="{{ path ('group_admin_delete', {'id': group.id}) }}">Usuń grupę</a><br>
+    <a href="{{ path ('group_admin_update', {'id': group.id}) }}">Edytuj dane</a><br>
 {% endfor %}

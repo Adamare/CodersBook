@@ -96,7 +96,7 @@ class CLGroupController extends Controller {
     }
 
     /**
-     * @Route("/admin/delete/{id}")
+     * @Route("/admin/delete/{id}", name="group_admin_delete")
      * @Template()
      * @Method("GET")
      */
@@ -151,8 +151,8 @@ class CLGroupController extends Controller {
     }
     
     /**
-     * @Route("/admin/update/{id}")
-     * @Template("CodersBookBundle:CLGroup:newGroup.html.twig")
+     * @Route("/admin/update/{id}", name="group_admin_update")
+     * @Template()
      * @Method("GET")
      */
     public function updateGetAction($id) {
@@ -161,9 +161,12 @@ class CLGroupController extends Controller {
 
         $group = $repo->find($id);
         
-        if ($group) {
-            $form = $this->updateGroupForm($group);
+        if (!$group) {
+            return [
+                'error'=>'Grupa o podanym id nie istnieje'
+            ];
         }
+        $form = $this->updateGroupForm($group);
         return[
             'form' => $form->createView()
         ];
@@ -171,7 +174,7 @@ class CLGroupController extends Controller {
         
         /**
      * @Route("/admin/update/{id}")
-     * @Template("CodersBookBundle:CLGroup:newGroup.html.twig")
+     * @Template("CodersBookBundle:CLGroup:updateGet.html.twig")
      * @Method("POST")
      */
     public function updatePostAction(Request $req, $id) {
@@ -186,6 +189,7 @@ class CLGroupController extends Controller {
         }
         return [
             'form' => $form->createView(),
+            'success'=>true
         ];
     }
 }

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        {% if error is defined%}
+            {{ error }}
+        {% else %}
+            {% if success is defined%}
+                Success!
+            {% endif%}
+            {{form_start(form)}}
+            {{form_widget(form)}}
+            {{form_end(form)}}
+        {% endif %}
+
+    </body>
+</html>
