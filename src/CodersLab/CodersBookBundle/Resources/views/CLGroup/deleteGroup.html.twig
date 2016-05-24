@@ -3,13 +3,17 @@
 {% block title %} Delete {% endblock %}
 
 {% block content %}
-    <form action="" method="POST">
-        Wybierz grupę do której chcesz przenieść osoby z usuwanej grupy:
-        <select name="selectedGroup">
-            {% for group in groups %}
-                <option value="{{group.id}}">{{ group.name }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Przenieś osoby do tej grupy</button>
-    </form>
+    {% if error is defined%}
+        {{ error }}
+    {% else %}
+        <form action="" method="POST">
+            Wybierz grupę do której chcesz przenieść osoby z usuwanej grupy:
+            <select name="selectedGroup">
+                {% for group in groups %}
+                    <option value="{{group.id}}">{{ group.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Przenieś osoby do tej grupy</button>
+        </form>
+    {% endif %}
 {% endblock %}

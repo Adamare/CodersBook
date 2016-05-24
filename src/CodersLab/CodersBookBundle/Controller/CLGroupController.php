@@ -17,7 +17,7 @@ use CodersLab\CodersBookBundle\Entity\Person;
 class CLGroupController extends Controller {
 
     /**
-     * @Route("/admin/all", name="group_admin_all")
+     * @Route("/all", name="group_admin_all")
      * @Template()
      */
     public function showAllAction() {
@@ -105,7 +105,11 @@ class CLGroupController extends Controller {
         $groups = $repo->findAll();
         
         $clGroup = $repo->find($id);
-        
+        if (!$clGroup) {
+            return [
+                'error' => 'Wybrana grupa nie istnieje',
+            ];
+        }
         $groups = array_filter($groups, function($checkGroup) use ($clGroup) {   
             return $checkGroup->getId() != $clGroup->getId();
         });
@@ -124,13 +128,6 @@ class CLGroupController extends Controller {
 
         $selectedGroupId = $req->request->get('selectedGroup');
 
-        if ($id == $selectedGroupId) {
-            return [
-                'error' => 'Wybierz inną grupę',
-                'id'=>$id
-            ];
-        }
-        
         $repoClGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
         $clGroupOld = $repoClGroup->find($id);
         $clGroupNew = $repoClGroup->find($selectedGroupId);
@@ -138,9 +135,10 @@ class CLGroupController extends Controller {
         $repoPerson = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
         $em = $this->getDoctrine()->getManager();
 
-        if (!$clGroupOld || !$clGroupNew) {
+        if (!$clGroupOld) {
             return [
-                'error' => 'Wybrana lub docelowa grupa nie istnieje'
+                'error' => 'Wybrana grupa nie istnieje',
+                'id'=>$id
             ];
         }
         
@@ -198,5 +196,13 @@ class CLGroupController extends Controller {
             'form' => $form->createView(),
             'success'=>true
         ];
+    }
+    
+    /**
+     * @Route("/{name}", name="group_admin")
+     * @Template()
+     */
+    public function redirectAction($name) {
+        return $this->redirectToRoute('person_admin_all', array("name"=>$name));
     }
 }
