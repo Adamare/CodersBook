@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use CodersLab\CodersBookBundle\Entity\Person;
 use CodersLab\CodersBookBundle\Entity\CLGroup;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * @Route("/person")
@@ -250,6 +251,54 @@ class PersonController extends Controller {
         return [
             'form' => $form->createView()
         ];
+    }
+    
+    /**
+     * @Route("/export_csv/{id}", name = "person_export_csv")
+     */
+    public function generateCsvAction($id) {
+        
+        $response = new StreamedResponse();
+        $response->setCallback(function() use($id) {
+        $handle = fopen('php://output', 'w+');
+
+        
+        fputcsv($handle, array('Name', 'Given Name', 'Additional Name', 'Family Name', 'Yomi Name'
+            , 'Given Name Yomi', 'Additional Name Yomi', 'Family Name Yomi'
+            , 'Name Prefix', 'Name Suffix', 'Initials', 'Nickname', 'Short Name', 'Maiden Name'
+            , 'Birthday', 'Gender', 'Location', 'Billing Information', 'Directory Server', 'Mileage Occupation'
+            , 'Hobby', 'Sensitivity', 'Priority', 'Subject', 'Notes', 'Group Membership', 'E-mail 1 - Type', 'E-mail 1 - Value'
+            , 'E-mail 2 - Type', 'E-mail 2 - Value', 'Phone 1 - Type', 'Phone 1 - Value'),';');
+        
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
+
+        $group = $repoGroup->find($id);
+        if (!$group) {
+            return [
+                'error' => 'Nie ma takiej grupy'
+            ];
+        }
+        $persons = $repo->findBy(['clGroup' => $group]);
+        
+        foreach ( $persons as $person) {
+            fputcsv(
+                    $handle,
+                    array($person->getName(), '', '', '', ''
+            , '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''
+            , '', '', '', '', '', '* CodersLab ::: '.$person->getClGroup(), '*', $person->getEmail()
+            , '', '', 'Mobile', $person->getPhone()),
+                    ';'
+            );
+        }
+        fclose($handle);
+        });
+        
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
+
+    return $response;
     }
 
 }
