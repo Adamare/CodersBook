@@ -63,7 +63,25 @@ class Person {
      * @ORM\JoinColumn(name="clgroup_id", referencedColumnName="id")
      */
     private $clGroup;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imageFN", type="string", length=100)
+     */
+    private $imageFN;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cvFN", type="string", length=100)
+     */
+    private $cvFN;
+   
+    public function __construct() {
+        $imageFN = '';
+        $cvFN = '';
+    }
     /**
      * Get id
      *
@@ -200,5 +218,51 @@ class Person {
     public function getClGroup()
     {
         return $this->clGroup;
+    }
+
+    /**
+     * Set imageFN
+     *
+     * @param string $imageFN
+     * @return Person
+     */
+    public function setImageFN($imageFN)
+    {
+        $this->imageFN = $imageFN;
+
+        return $this;
+    }
+
+    /**
+     * Get imageFN
+     *
+     * @return string 
+     */
+    public function getImageFN()
+    {
+        return $this->imageFN;
+    }
+
+    /**
+     * Set cvFN
+     *
+     * @param string $cvFN
+     * @return Person
+     */
+    public function setCvFN($cvFN)
+    {
+        $this->cvFN = $cvFN;
+
+        return $this;
+    }
+
+    /**
+     * Get cvFN
+     *
+     * @return string 
+     */
+    public function getCvFN()
+    {
+        return $this->cvFN;
     }
 }
