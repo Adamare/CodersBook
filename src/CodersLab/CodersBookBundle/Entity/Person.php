@@ -11,7 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CodersLab\CodersBookBundle\Entity\PersonRepository")
  */
 class Person {
-
+    
+    
+    public function __toString() {
+        return 'Osoba:' .$this->name;
+    }
+    
     /**
      * @var integer
      *
