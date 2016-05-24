@@ -16,7 +16,38 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PersonController extends Controller {
 
-    public function upload() {
+    private function fileHandle($file, $person, $type) {
+        $dir = $this->container->getParameter('kernel.root_dir') . '/../web/uploads/';
+
+        if (!$file)
+            return;
+
+        switch ($type) {
+            case 'cv':
+                $fileName = $person->getCvFN();
+                break;
+            case 'image':
+                $fileName = $person->getImageFN();
+                break;
+        }
+
+        if (!empty($fileName) && file_exists($dir . $fileName)) {
+            unlink($dir . $fileName);
+        }
+        $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+        $file->move($dir, $fileName);
+
+        switch ($type) {
+            case 'cv':
+                $person->setCvFN($fileName);
+                break;
+            case 'image':
+                $person->setImageFN($fileName);
+                break;
+        }
+    }
+
+    private function upload() {
 
 
         $form = $this->createFormBuilder()
@@ -203,24 +234,18 @@ class PersonController extends Controller {
 
         $form = $this->upload();
         $form->handleRequest($req);
-        $dir = $this->container->getParameter('kernel.root_dir') . '/../web/uploads';
 
         if ($form->isSubmitted()) {
             $cv = $form->get('cv')->getData();
-            $cvName = md5(uniqid()) . '.' . $cv->guessExtension();
             $image = $form->get('image')->getData();
-            $imageName = md5(uniqid()) . '.' . $image->guessExtension();
 
-            $cv->move($dir, $cvName);
-            $image->move($dir, $imageName);
+            $this->fileHandle($cv, $person, 'cv');
+            $this->fileHandle($image, $person, 'image');
 
-            $person->setImageFN($imageName);
-            $person->setCvFN($cvName);
-            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($person);
             $em->flush();
         }
+
 
         return [
             'form' => $form->createView()

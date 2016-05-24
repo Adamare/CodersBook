@@ -79,8 +79,8 @@ class Person {
     private $cvFN;
    
     public function __construct() {
-        $imageFN = '';
-        $cvFN = '';
+        $this->imageFN = '';
+        $this->cvFN = '';
     }
     /**
      * Get id
