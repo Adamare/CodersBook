@@ -255,7 +255,7 @@ class PersonController extends Controller {
     }
 
     /**
-     * @Route("/admin/download/{id}", name = "person_admin_download")
+     * @Route("/download/{id}", name = "person_admin_download")
      * 
      */
     public function downloadPersonAction($id) {
