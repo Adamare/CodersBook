@@ -13,6 +13,7 @@
         <thead>
           <tr>
             <th class="mdl-data-table__cell--non-numeric">Grupa</th>
+            <th class="mdl-data-table__cell--non-numeric">Ilość osób</th>
             <th class="mdl-data-table__cell--non-numeric">Wykładowca</th>
             <th class="mdl-data-table__cell--non-numeric">Akcje</th>
           </tr>
@@ -20,7 +21,13 @@
         <tbody>
             {% for group in groups %}
                 <tr>
-                    <td class="mdl-data-table__cell--non-numeric"><i class="material-icons middle">people_outline</i> {{group.name}}</td>   
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a id="show{{group.id}}Group" href="{{ path('group_admin', {'name':group.name}) }}"><i class="material-icons middle">people_outline</i> {{group.name}} (otwórz)</a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="show{{group.id}}Group">
+                            Wyświetl osoby w tej grupie
+                        </div>
+                    </td>   
+                    <td class="mdl-data-table__cell--non-numeric">{{group.persons|length}} {# <- This is higly unoptimized when we have a lot of groups and useing default lazy loading! #}</td></td>   
                     <td class="mdl-data-table__cell--non-numeric">{{group.lecturer}}</td>
                     <td class="mdl-data-table__cell--non-numeric">
                         <a id="edit{{group.id}}Group" href="{{ path ('group_admin_update', {'id': group.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">

@@ -4,7 +4,7 @@
 
 {% block content %}
     {% if error is defined%}
-        {{ error }}
+        <div class="info error"><i class="material-icons">warning</i> {{ error }}</div>
     {% else %}
         <form action="" method="POST">
             Wybierz grupę do której chcesz przenieść osoby z usuwanej grupy:
