@@ -75,6 +75,7 @@ class PersonController extends Controller {
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
                     'choice_label' => 'name'])
+                ->add('lookingForJob', 'checkbox', ['label' => 'Status zatrudnienia (szuka pracy)'])
                 ->add('save', 'submit', ['label' => 'Dodaj osobę'])
                 ->getForm();
         return $form;
@@ -92,6 +93,7 @@ class PersonController extends Controller {
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
                     'choice_label' => 'name'])
+                ->add('lookingForJob', 'checkbox', ['label' => 'Status zatrudnienia (szuka pracy)'])
                 ->add('save', 'submit', ['label' => 'Zapisz zmiany'])
                 ->getForm();
         return $form;
