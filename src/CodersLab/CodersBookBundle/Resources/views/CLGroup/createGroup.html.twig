@@ -1,12 +1,13 @@
 {% extends "CodersBookBundle::base.html.twig" %}
 
-{% block title %} Create {% endblock %}
+{% set title = 'Dodawanie grupy' %}
 
 {% block content %}
     {% if error is defined %}
-        {{ error }}<br>
-        <a href="{{ path('group_admin_new') }}">Dodaj jeszcze raz</a>
+        <div class="info error"><i class="material-icons">warning</i> {{ error }}</div>
+        <div class="w100 text-center"><a href="{{ path('group_admin_new') }}">Dodaj jeszcze raz</a></div>
     {% else %}
-        <a href="{{ path('group_admin_all') }}">Strona główna</a>
+        <div class="info success"><i class="material-icons">done</i> Poprawnie dodano grupę.</div>
+        <div class="w100 text-center"><a href="{{ path('group_admin_all') }}">Strona główna</a></div>
     {% endif%}
 {% endblock %}

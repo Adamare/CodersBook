@@ -1,0 +1,16 @@
+{% extends "CodersBookBundle::base.html.twig" %}
+
+{% set title = 'CodersBook' %}
+
+{% block content %}
+    <div class="text-center w100"><img src="http://dev.coderslab.pl/wp-content/uploads/2015/09/logo@2x.png"></div>
+    <h2>Witaj w aplikacji CodersBook</h2>
+    <p>Dzięki niej poznasz naszych kursantów - kandydatów na stanowiska programistyczne.</p>
+    <p>PS. Tą aplikację też stworzyli nasi kursanci.</p>
+    <div class="text-center w100">
+        <a href="{{ path('group_admin_all') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Rozpocznij przeglądanie grup
+        </a>
+    </div>
+    
+{% endblock %} 

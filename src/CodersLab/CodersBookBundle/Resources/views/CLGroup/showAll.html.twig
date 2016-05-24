@@ -1,12 +1,53 @@
 {% extends "CodersBookBundle::base.html.twig" %}
 
-{% block title %} ShowAll {% endblock %}
+{% set title = 'Spis grup' %}
 
 {% block content %}
-{% for group in groups %}
-    Grupa: {{group.name}}<br>   
-    Wykładowca: {{group.lecturer}}<br>
-    <a href="{{ path ('group_admin_delete', {'id': group.id}) }}">Usuń grupę</a><br>
-    <a href="{{ path ('group_admin_update', {'id': group.id}) }}">Edytuj dane</a><br>
-{% endfor %}
+    <div class="w100 text-center mrg10a">
+        <a href="{{ path('group_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <i class="material-icons">add</i> Dodaj nową grupę
+        </a>
+    </div>
+    
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp w100">
+        <thead>
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">Grupa</th>
+            <th class="mdl-data-table__cell--non-numeric">Wykładowca</th>
+            <th class="mdl-data-table__cell--non-numeric">Akcje</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric"><i class="material-icons middle">people_outline</i> {{group.name}}</td>   
+                    <td class="mdl-data-table__cell--non-numeric">{{group.lecturer}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a id="edit{{group.id}}Group" href="{{ path ('group_admin_update', {'id': group.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                          <i class="material-icons">edit</i>
+                        </a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="edit{{group.id}}Group">
+                            Modyfikuj
+                        </div>
+                          
+                        <a id="del{{group.id}}Group" href="{{ path ('group_admin_delete', {'id': group.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                          <i class="material-icons">delete</i>
+                        </a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="del{{group.id}}Group">
+                            Usuń grupę
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td>Brak grup.</td></tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+        
+    <div class="w100 text-center mrg10a">
+        <a href="{{ path('group_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <i class="material-icons">add</i> Dodaj nową grupę
+        </a>
+    </div>
 {% endblock %}

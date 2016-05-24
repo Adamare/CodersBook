@@ -1,14 +1,14 @@
 {% extends "CodersBookBundle::base.html.twig" %}
 
-{% block title %} Delete {% endblock %}
+{% set title = 'Usuwanie grupy'  %}
 
 {% block content %}
-{% if error is not defined %}
-    Grupa została usunięta
-{% else %}
-    {{ error }}
-    <a href="{{ path ('group_admin_delete', {'id': id}) }}">Powrót</a><br>
-{% endif %}
-
+    {% if error is not defined %}
+        <div class="info success"><i class="material-icons">done</i> Grupa została usunięta, a osoby przeniesione.</div>
+        <div class="w100 text-center"><a href="{{ path('group_admin_all') }}">Strona główna</a></div>
+    {% else %}
+        <div class="info error"><i class="material-icons">warning</i> {{ error }}</div>
+        <div class="w100 text-center"><a href="{{ path ('group_admin_delete', {'id': id}) }}">Spróbuj jeszcze raz</a></div>
+    {% endif %}
 {% endblock %} 
 

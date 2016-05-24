@@ -1,0 +1,43 @@
+@media(min-width: 900px){
+    .p800{
+        width:800px;
+        margin:auto;
+    }
+}
+
+.text-center{
+    text-align: center;
+}
+
+.w100{
+    width:100%;
+}
+
+.info{
+    font-weight: bold;
+    padding:10px;
+    width:80%;
+    margin:10px auto;
+}
+
+.info i.material-icons, .middle{
+    vertical-align: middle;
+}
+
+.info.error{
+    color: red;
+    border: 1px solid red;
+}
+
+.info.success{
+    color: green;
+    border: 1px solid green;
+}
+
+.pad10a{
+    padding:10px;
+}
+
+.mrg10a{
+    margin:10px;
+}

@@ -1,17 +1,17 @@
 {% extends "CodersBookBundle::base.html.twig" %}
 
-{% block title %} Update {% endblock %}
+{% set title = 'Edycja grupy'  %}
 
 {% block content %}
         {% if error is defined%}
-            {{ error }}
+            <div class="info error"><i class="material-icons">warning</i> {{ error }}</div>
         {% else %}
             {% if success is defined%}
-                Success!
+                <div class="info success"><i class="material-icons">done</i> Poprawnie zapisano grupę.</div>
             {% endif%}
             {{form_start(form)}}
             {{form_widget(form)}}
             {{form_end(form)}}
         {% endif %}
-        <a href="{{ path ('group_admin_all') }}">Strona główna</a><br>
+        <div class="w100 text-center"><a href="{{ path('group_admin_all') }}">Strona główna</a></div>
 {% endblock %}
