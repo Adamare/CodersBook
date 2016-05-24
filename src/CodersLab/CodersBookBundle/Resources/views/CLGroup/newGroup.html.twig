@@ -1,3 +1,9 @@
-{{ form_start(form)}}
-{{ form_widget(form)}}
-{{ form_end(form)}}
+{% extends "CodersBookBundle::base.html.twig" %}
+
+{% block title %} New group{% endblock %}
+
+{% block content %}
+    {{ form_start(form)}}
+    {{ form_widget(form)}}
+    {{ form_end(form)}}
+{% endblock %}

@@ -1,5 +1,14 @@
+{% extends "CodersBookBundle::base.html.twig" %}
+
+{% block title %} Delete {% endblock %}
+
+{% block content %}
 {% if error is not defined %}
     Grupa została usunięta
 {% else %}
     {{ error }}
+    <a href="{{ path ('group_admin_delete', {'id': id}) }}">Powrót</a><br>
 {% endif %}
+
+{% endblock %} 
+

@@ -44,7 +44,7 @@ class CLGroupController extends Controller {
         $form = $this->createFormBuilder($group)
                 ->add('name', 'text', ['label' => 'Nazwa grupy'])
                 ->add('lecturer', 'text', ['label' => 'Wykładowca'])
-                ->add('save', 'submit', ['label' => 'Zmień grupę'])
+                ->add('save', 'submit', ['label' => 'Aktualizuj grupę'])
                 ->getForm();
         return $form;
     }
@@ -103,7 +103,13 @@ class CLGroupController extends Controller {
     public function deleteGroupAction($id) {
         $repo = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
         $groups = $repo->findAll();
-
+        
+        $clGroup = $repo->find($id);
+        
+        $groups = array_filter($groups, function($checkGroup) use ($clGroup) {   
+            return $checkGroup->getId() != $clGroup->getId();
+        });
+        
         return [
             'groups' => $groups
         ];
@@ -120,10 +126,11 @@ class CLGroupController extends Controller {
 
         if ($id == $selectedGroupId) {
             return [
-                'error' => 'Wybierz inną grupę'
+                'error' => 'Wybierz inną grupę',
+                'id'=>$id
             ];
         }
-
+        
         $repoClGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
         $clGroupOld = $repoClGroup->find($id);
         $clGroupNew = $repoClGroup->find($selectedGroupId);

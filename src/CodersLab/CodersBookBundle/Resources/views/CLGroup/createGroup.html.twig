@@ -1,6 +1,12 @@
-{% if error is defined %}
-    {{ error }}<br>
-    <a href="{{ path('group_admin_new') }}">Dodaj jeszcze raz</a>
-{% else %}
-    <a href="{{ path('group_admin_all') }}">Strona główna</a>
-{% endif%}
+{% extends "CodersBookBundle::base.html.twig" %}
+
+{% block title %} Create {% endblock %}
+
+{% block content %}
+    {% if error is defined %}
+        {{ error }}<br>
+        <a href="{{ path('group_admin_new') }}">Dodaj jeszcze raz</a>
+    {% else %}
+        <a href="{{ path('group_admin_all') }}">Strona główna</a>
+    {% endif%}
+{% endblock %}
