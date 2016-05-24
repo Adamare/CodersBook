@@ -75,7 +75,7 @@ class PersonController extends Controller {
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
                     'choice_label' => 'name'])
-                ->add('lookingForJob', 'checkbox', ['label' => 'Status zatrudnienia (szuka pracy)',  'required' => false])
+                ->add('lookingForJob', 'checkbox', ['label' => 'Status zatrudnienia (szuka pracy)', 'required' => false])
                 ->add('save', 'submit', ['label' => 'Dodaj osobę'])
                 ->getForm();
         return $form;
@@ -93,7 +93,7 @@ class PersonController extends Controller {
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
                     'choice_label' => 'name'])
-                ->add('lookingForJob', 'checkbox', ['label' => 'Status zatrudnienia (szuka pracy)',  'required' => false])
+                ->add('lookingForJob', 'checkbox', ['label' => 'Status zatrudnienia (szuka pracy)', 'required' => false])
                 ->add('save', 'submit', ['label' => 'Zapisz zmiany'])
                 ->getForm();
         return $form;
@@ -274,6 +274,49 @@ class PersonController extends Controller {
         $response->setContentDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT, $person->getName() . '.' . $ext
         );
+        return $response;
+    }
+
+    /**
+     * @Route("/export_zip/{id}", name = "person_export_zip")
+     * 
+     */
+    public function exportAction($id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
+
+        $group = $repoGroup->find($id);
+        if (!$group) {
+            return [
+                'error' => 'Nie ma takiej grupy'
+            ];
+        }
+        
+        $persons = $repo->findBy(['clGroup' => $group]);
+        
+        
+        
+        $zip = new \ZipArchive();
+        $zipName = $group->getName() . ".zip";
+        $zip->open($this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $zipName, \ZipArchive::CREATE);
+        foreach ($persons as $person) {
+            if($person->getCvFN() == ''){
+                continue;
+            }
+            $file = $this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $person->getCvFN();
+            $ext = pathinfo($file, PATHINFO_EXTENSION);
+            $personCV = $person->getName() . '.' . $ext;
+            $zip->addFromString($personCV, file_get_contents($file));
+        }
+        $zip->close();
+        $response = new BinaryFileResponse($this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $zipName);
+        $response->headers->set('Content-Type', 'application/octet-stream');
+
+
+        $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zipName
+        );
+        $response->deleteFileAfterSend(true);
         return $response;
     }
 
