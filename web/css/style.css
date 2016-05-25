@@ -6,7 +6,11 @@
 }
 
 .text-center{
-    text-align: center;
+    text-align: center !important;
+}
+
+.inline-block{
+    display: inline-block;
 }
 
 .w100{

@@ -1,17 +1,27 @@
 {% extends "CodersBookBundle::base.html.twig" %}
 
-{% block title %} Search Results {% endblock %}
+    {% set title = 'Wyniki wyszukiwania' %}
 
 {% block content %}
     
     {% if error is not defined %}
-        {% for result in searchedGroups %}
-            {{ result }}<br>
-        {% endfor %}
-        {% for result2 in searchedPeople %}
-            {{ result2 }}<br>
-        {% endfor %}
+        <h3 class="w100">Wyszukiwanie w grupach</h3>
+        <ul>
+            {% for result in searchedGroups %}
+                <li><a href=" {{ path('person_admin_all', {'name':result.name}) }}">{{ result.name }}</a></li>
+            {% else %}
+                <li>Brak wyników.</li>
+            {% endfor %}
+        </ul>
+        <h3 class="w100">Wyszukiwanie w osobach</h3>
+        <ul>
+            {% for result in searchedPeople %}
+                <li><a href=" {{ path('person_admin_all', {'name':result.clGroup.name}) }}">{{ result.name }}</a></li>
+            {% else %}
+                <li>Brak wyników.</li>
+            {% endfor %}
+        </ul>
     {% else %}
-        {{ error }}
+        <div class="info error"><i class="material-icons">warning</i> {{ error }}</div>
     {% endif %}
 {% endblock %}

@@ -13,15 +13,6 @@ use CodersBookBundle\Entity\CLGroupRepository;
 class SearchController extends Controller {
     
     /**
-     * @Route("/searchAll", name="search_all_get")
-     * @Template()
-     * @Method("GET")
-     */
-    public function searchAllGetAction() {
-        return [];
-    }
-    
-    /**
      * @Route("/searchAll", name="search_all_post")
      * @Template()
      * @Method("POST")

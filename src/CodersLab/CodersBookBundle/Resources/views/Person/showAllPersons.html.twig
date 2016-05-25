@@ -15,7 +15,8 @@
             </a>
         </div>
                 
-            <form action="#" class="w100 text-center mrg10a" onsubmit="return false;">
+        <form action="#" class="w100 text-center mrg10a" onsubmit="return false;">
+            Udostępnij link z grupą:
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
                 <label class="mdl-button mdl-js-button mdl-button--icon" for="shareLink">
                   <i class="material-icons">share</i>
@@ -116,6 +117,21 @@
             <tr><td>Brak osób w tej grupie.</td></tr>
         {% endfor %}
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7" class="text-center mdl-data-table__cell--non-numeric">
+                    <div class="inline-block">
+                        <a href="{{ path ('person_export_zip', {'id': clGroup.id}) }}" target="_blank" class="mrg10a mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            <i class="material-icons">file_download</i> Pobierz wszystkie CV w paczce
+                        </a>
+
+                        <a href="{{ path ('person_export_csv', {'id': clGroup.id}) }}" target="_blank" class="mrg10a mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            <i class="material-icons">file_download</i> Pobierz wszystkie kontakty jako CSV
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
         
     </table>
     </div>

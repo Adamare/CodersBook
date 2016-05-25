@@ -1,8 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <body>
-            {{form_start(form)}}
-            {{form_widget(form)}}
-            {{form_end(form)}}
-    </body>
-</html
+{% extends "CodersBookBundle::base.html.twig" %}
+
+    {% set title = 'Aktualizowanie plików' %}
+
+{% block content %}
+    <p>Wybierz te pliki, które chcesz zmienić. Nie wybrane pliki nie zostaną zastąpione.</p>
+    {{form_start(form)}}
+    {{form_widget(form)}}
+    {{form_end(form)}}
+{% endblock %}
