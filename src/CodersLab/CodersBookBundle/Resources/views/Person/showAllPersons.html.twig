@@ -9,11 +9,13 @@
 
 {% block content %}
     {% if error is not defined %}
+        {% if app.user is not null %}
         <div class="w100 text-center mrg10a">
             <a href="{{ path('person_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 <i class="material-icons">add</i> Dodaj nową osobę
             </a>
         </div>
+        {% endif %}
                 
         <form action="#" class="w100 text-center mrg10a" onsubmit="return false;">
             Udostępnij link z grupą:
@@ -38,7 +40,9 @@
                 <th class="mdl-data-table__cell--non-numeric">Profil GitHub</th>
                 <th class="mdl-data-table__cell--non-numeric">Profil LinkedIn</th>
                 <th class="mdl-data-table__cell--non-numeric">CV</th>
-                <th class="mdl-data-table__cell--non-numeric">Akcje</th>
+                {% if app.user is not null %}
+                    <th class="mdl-data-table__cell--non-numeric">Akcje</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -90,6 +94,7 @@
                             -
                         {% endif %}
                     </td>
+                    {% if app.user is not null %}
                     <td class="mdl-data-table__cell--non-numeric">                          
                         <a id="upload{{person.id}}Person" href="{{ path ('person_admin_upload', {'id': person.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                           <i class="material-icons">file_upload</i>
@@ -112,6 +117,7 @@
                             Usuń osobę
                         </div>
                     </td>
+                    {% endif %}
                 </tr>
         {% else %}
             <tr><td>Brak osób w tej grupie.</td></tr>
@@ -135,12 +141,15 @@
         
     </table>
     </div>
-                
+    
+   {% if app.user is not null %}
     <div class="w100 text-center mrg10a">
         <a href="{{ path('person_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             <i class="material-icons">add</i> Dodaj nową osobę
         </a>
     </div>
+    {% endif %}
+    
     {% else %}
         <div class="info error"><i class="material-icons">warning</i> {{ error }}</div>
     {% endif %}

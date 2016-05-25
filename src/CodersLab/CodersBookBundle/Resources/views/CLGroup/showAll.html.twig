@@ -3,19 +3,24 @@
 {% set title = 'Spis grup' %}
 
 {% block content %}
+    {% if app.user is not null %}
     <div class="w100 text-center mrg10a">
         <a href="{{ path('group_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             <i class="material-icons">add</i> Dodaj nową grupę
         </a>
     </div>
+    {% endif %}
     
+    <div class="responsive-table">
     <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp w100">
         <thead>
           <tr>
             <th class="mdl-data-table__cell--non-numeric">Grupa</th>
             <th class="mdl-data-table__cell--non-numeric">Ilość osób</th>
             <th class="mdl-data-table__cell--non-numeric">Wykładowca</th>
+            {% if app.user is not null %}
             <th class="mdl-data-table__cell--non-numeric">Akcje</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody>
@@ -29,6 +34,7 @@
                     </td>   
                     <td class="mdl-data-table__cell--non-numeric">{{group.persons|length}} {# <- This is higly unoptimized when we have a lot of groups and useing default lazy loading! #}</td></td>   
                     <td class="mdl-data-table__cell--non-numeric">{{group.lecturer}}</td>
+                    {% if app.user is not null %}
                     <td class="mdl-data-table__cell--non-numeric">
                         <a id="edit{{group.id}}Group" href="{{ path ('group_admin_update', {'id': group.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                           <i class="material-icons">edit</i>
@@ -44,6 +50,7 @@
                             Usuń grupę
                         </div>
                     </td>
+                    {% endif %}
                 </tr>
             {% else %}
                 <tr><td>Brak grup.</td></tr>
@@ -51,10 +58,14 @@
         </tbody>
         
     </table>
+    </div>
         
+    {% if app.user is not null %}
     <div class="w100 text-center mrg10a">
         <a href="{{ path('group_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             <i class="material-icons">add</i> Dodaj nową grupę
         </a>
     </div>
+    {% endif %}
+        
 {% endblock %}

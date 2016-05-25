@@ -36,28 +36,28 @@ class Person {
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=15)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="github", type="string", length=255)
+     * @ORM\Column(name="github", type="string", length=255, nullable=true)
      */
     private $github;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="linkedin", type="string", length=255)
+     * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
      */
     private $linkedin;
 
@@ -72,14 +72,14 @@ class Person {
     /**
      * @var string
      *
-     * @ORM\Column(name="imageFN", type="string", length=100)
+     * @ORM\Column(name="imageFN", type="string", length=100, nullable=true)
      */
     private $imageFN;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="cvFN", type="string", length=100)
+     * @ORM\Column(name="cvFN", type="string", length=100, nullable=true)
      */
     private $cvFN;
     
@@ -89,16 +89,6 @@ class Person {
      * @ORM\Column(name="lookingForJob", type="boolean")
      */
     private $lookingForJob;
-   
-    public function __construct() {
-        $this->imageFN = '';
-        $this->cvFN = '';
-        $this->email = '';
-        $this->phone = '';
-        $this->github = '';
-        $this->linkedin = '';
-        
-    }
     /**
      * Get id
      *
