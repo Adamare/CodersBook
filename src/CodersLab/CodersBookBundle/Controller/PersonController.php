@@ -10,7 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use CodersLab\CodersBookBundle\Entity\Person;
 use CodersLab\CodersBookBundle\Entity\CLGroup;
 use Symfony\Component\HttpFoundation\Response;
+<<<<<<< HEAD
 use Symfony\Component\HttpFoundation\StreamedResponse;
+=======
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+>>>>>>> origin/master
 
 /**
  * @Route("/person")
@@ -53,7 +58,7 @@ class PersonController extends Controller {
 
         $form = $this->createFormBuilder()
                 ->add('cv', 'file', ['label' => 'Twoje CV'])
-                ->add('image', 'file', ['label' => 'Twoje zdjęcie'])
+                ->add('image', 'file', ['label' => 'Twoje zdjęcie', 'required' => false])
                 ->add('save', 'submit', ['label' => 'Wyślij plik'])
                 ->getForm();
 
@@ -66,14 +71,15 @@ class PersonController extends Controller {
         $form = $this->createFormBuilder($person)
                 ->setAction($this->generateUrl('person_admin_create'))
                 ->add('name', 'text', ['label' => 'Imię i nazwisko'])
-                ->add('email', 'text', ['label' => 'Adres e-mail'])
-                ->add('phone', 'text', ['label' => 'Numer telefonu'])
+                ->add('email', 'text', ['label' => 'Adres e-mail', 'required' => false])
+                ->add('phone', 'text', ['label' => 'Numer telefonu', 'required' => false])
                 ->add('github', 'text', ['label' => 'Login Github', 'required' => false])
                 ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn', 'required' => false])
                 ->add('clGroup', 'entity', [
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
                     'choice_label' => 'name'])
+                ->add('lookingForJob', 'checkbox', ['label' => 'Status zatrudnienia (szuka pracy)', 'required' => false])
                 ->add('save', 'submit', ['label' => 'Dodaj osobę'])
                 ->getForm();
         return $form;
@@ -83,14 +89,15 @@ class PersonController extends Controller {
 
         $form = $this->createFormBuilder($person)
                 ->add('name', 'text', ['label' => 'Imię i nazwisko'])
-                ->add('email', 'text', ['label' => 'Adres e-mail'])
-                ->add('phone', 'text', ['label' => 'Numer telefonu'])
+                ->add('email', 'text', ['label' => 'Adres e-mail', 'required' => false])
+                ->add('phone', 'text', ['label' => 'Numer telefonu', 'required' => false])
                 ->add('github', 'text', ['label' => 'Login Github', 'required' => false])
                 ->add('linkedin', 'text', ['label' => 'ID profilu LinkedIn', 'required' => false])
                 ->add('clGroup', 'entity', [
                     'label' => 'Grupa',
                     'class' => 'CodersBookBundle:CLGroup',
                     'choice_label' => 'name'])
+                ->add('lookingForJob', 'checkbox', ['label' => 'Status zatrudnienia (szuka pracy)', 'required' => false])
                 ->add('save', 'submit', ['label' => 'Zapisz zmiany'])
                 ->getForm();
         return $form;
@@ -299,6 +306,70 @@ class PersonController extends Controller {
         $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
 
     return $response;
+    }
+
+    /**
+     * @Route("/download/{id}", name = "person_admin_download")
+     * 
+     */
+    public function downloadPersonAction($id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $person = $repo->find($id);
+        $cvName = $person->getCvFN();
+        $file = $this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $cvName;
+
+        $response = new BinaryFileResponse($file);
+        $response->headers->set('Content-Type', 'application/octet-stream');
+
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
+
+        $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT, $person->getName() . '.' . $ext
+        );
+        return $response;
+    }
+
+    /**
+     * @Route("/export_zip/{id}", name = "person_export_zip")
+     * 
+     */
+    public function exportAction($id) {
+        $repo = $this->getDoctrine()->getRepository('CodersBookBundle:Person');
+        $repoGroup = $this->getDoctrine()->getRepository('CodersBookBundle:CLGroup');
+
+        $group = $repoGroup->find($id);
+        if (!$group) {
+            return [
+                'error' => 'Nie ma takiej grupy'
+            ];
+        }
+        
+        $persons = $repo->findBy(['clGroup' => $group]);
+        
+        
+        
+        $zip = new \ZipArchive();
+        $zipName = $group->getName() . ".zip";
+        $zip->open($this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $zipName, \ZipArchive::CREATE);
+        foreach ($persons as $person) {
+            if($person->getCvFN() == ''){
+                continue;
+            }
+            $file = $this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $person->getCvFN();
+            $ext = pathinfo($file, PATHINFO_EXTENSION);
+            $personCV = $person->getName() . '.' . $ext;
+            $zip->addFromString($personCV, file_get_contents($file));
+        }
+        $zip->close();
+        $response = new BinaryFileResponse($this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $zipName);
+        $response->headers->set('Content-Type', 'application/octet-stream');
+
+
+        $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zipName
+        );
+        $response->deleteFileAfterSend(true);
+        return $response;
     }
 
 }

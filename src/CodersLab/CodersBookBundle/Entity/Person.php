@@ -82,10 +82,22 @@ class Person {
      * @ORM\Column(name="cvFN", type="string", length=100)
      */
     private $cvFN;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lookingForJob", type="boolean")
+     */
+    private $lookingForJob;
    
     public function __construct() {
         $this->imageFN = '';
         $this->cvFN = '';
+        $this->email = '';
+        $this->phone = '';
+        $this->github = '';
+        $this->linkedin = '';
+        
     }
     /**
      * Get id
@@ -269,5 +281,28 @@ class Person {
     public function getCvFN()
     {
         return $this->cvFN;
+    }
+
+    /**
+     * Set lookingForJob
+     *
+     * @param boolean $lookingForJob
+     * @return Person
+     */
+    public function setLookingForJob($lookingForJob)
+    {
+        $this->lookingForJob = $lookingForJob;
+
+        return $this;
+    }
+
+    /**
+     * Get lookingForJob
+     *
+     * @return boolean 
+     */
+    public function getLookingForJob()
+    {
+        return $this->lookingForJob;
     }
 }

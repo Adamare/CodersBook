@@ -11,7 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CodersLab\CodersBookBundle\Entity\PersonRepository")
  */
 class Person {
-
+    
+    
+    public function __toString() {
+        return 'Osoba: ' .$this->name;
+    }
+    
     /**
      * @var integer
      *
@@ -77,10 +82,22 @@ class Person {
      * @ORM\Column(name="cvFN", type="string", length=100)
      */
     private $cvFN;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lookingForJob", type="boolean")
+     */
+    private $lookingForJob;
    
     public function __construct() {
-        $imageFN = '';
-        $cvFN = '';
+        $this->imageFN = '';
+        $this->cvFN = '';
+        $this->email = '';
+        $this->phone = '';
+        $this->github = '';
+        $this->linkedin = '';
+        
     }
     /**
      * Get id
@@ -218,5 +235,51 @@ class Person {
     public function getClGroup()
     {
         return $this->clGroup;
+    }
+
+    /**
+     * Set imageFN
+     *
+     * @param string $imageFN
+     * @return Person
+     */
+    public function setImageFN($imageFN)
+    {
+        $this->imageFN = $imageFN;
+
+        return $this;
+    }
+
+    /**
+     * Get imageFN
+     *
+     * @return string 
+     */
+    public function getImageFN()
+    {
+        return $this->imageFN;
+    }
+
+    /**
+     * Set cvFN
+     *
+     * @param string $cvFN
+     * @return Person
+     */
+    public function setCvFN($cvFN)
+    {
+        $this->cvFN = $cvFN;
+
+        return $this;
+    }
+
+    /**
+     * Get cvFN
+     *
+     * @return string 
+     */
+    public function getCvFN()
+    {
+        return $this->cvFN;
     }
 }

@@ -1,30 +1,131 @@
 {% extends "CodersBookBundle::base.html.twig" %}
 
-{% block title %} ShowAll  {% endblock %}
+{% if error is not defined %}
+    {% set title = ('Grupa ' ~ clGroup.name) %}
+    {% set fullWidth = true %}
+{% else %}
+    {% set title = 'Grupa - błąd' %}
+{% endif %}
 
 {% block content %}
     {% if error is not defined %}
-        Oto osoby które są w grupie {{clGroup.name }}:<br>
+        <div class="w100 text-center mrg10a">
+            <a href="{{ path('person_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <i class="material-icons">add</i> Dodaj nową osobę
+            </a>
+        </div>
+                
+            <form action="#" class="w100 text-center mrg10a" onsubmit="return false;">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                <label class="mdl-button mdl-js-button mdl-button--icon" for="shareLink">
+                  <i class="material-icons">share</i>
+                </label>
+                <div class="mdl-textfield__expandable-holder">
+                  <input class="mdl-textfield__input" type="text" id="shareLink"  readonly="readonly" onclick="this.select();this.focus();" value="{{ url('group_admin', {'name':clGroup.name}) }}">
+                  <label class="mdl-textfield__label" for="shareLink">Pobierz link do udostępnienia</label>
+                </div>
+            </div>
+        </form>
+
+        <div class="responsive-table">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp w100">
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">Imię i nazwisko</th>
+                <th class="mdl-data-table__cell--non-numeric">E-mail</th>
+                <th class="mdl-data-table__cell--non-numeric">Nr tel.</th>
+                <th class="mdl-data-table__cell--non-numeric">Profil GitHub</th>
+                <th class="mdl-data-table__cell--non-numeric">Profil LinkedIn</th>
+                <th class="mdl-data-table__cell--non-numeric">CV</th>
+                <th class="mdl-data-table__cell--non-numeric">Akcje</th>
+              </tr>
+            </thead>
+            <tbody>
 
         {% for person in persons %}
-
-            Imię i nazwisko: {{ person.name }}, e-mail: {{ person.email }}, tel: {{ person.phone }} <br>
-            {% if person.github is empty %}
-                Konto na Github: - <br>
-            {% else %}
-                Konto na Github: <a href="https://github.com/{{ person.github }}">{{ person.github }}</a><br>
-            {% endif %}
-            {% if person.linkedin is empty %}
-                Konto na LinkedIn: - <br>
-            {% else %}
-                Konto na LinkedIn: <a href="https://pl.linkedin.com/in/{{ person.linkedin }}">{{ person.linkedin }}</a><br>               
-            {% endif %}
-            <a href="{{ path ('person_admin_delete', {'id': person.id}) }}">Usuń osobę</a><br>
-            <a href="{{ path ('person_admin_update', {'id': person.id}) }}">Edytuj dane</a><br>
-            <hr>
-
+                <tr>            
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {% if person.imageFN is not empty %}
+                            <div style="background-image:url('/uploads/{{ person.imageFN }}')" class="avatar middle"></div>
+                        {% else %}
+                            <i class="material-icons middle">person</i>
+                        {% endif %}    
+                        {{person.name}}
+                    </td>   
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {% if person.email is not empty %}
+                            <a href="mailto:{{ person.email }}">{{ person.email }}</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {% if person.phone is not empty %}
+                            <a href="tel:{{ person.phone }}">{{ person.phone }}</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {% if person.github is not empty %}
+                            <a href="https://github.com/{{ person.github }}" target="_blank">{{ person.github }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {% if person.linkedin is not empty %}
+                            <a href="https://pl.linkedin.com/in/{{ person.linkedin }}" target="_blank">{{ person.linkedin }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {% if person.cvFN is not empty %}
+                            <a href="{{ path ('person_admin_download', {'id': person.id}) }}" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                <i class="material-icons">file_download</i> Pobierz CV
+                            </a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">                          
+                        <a id="upload{{person.id}}Person" href="{{ path ('person_admin_upload', {'id': person.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                          <i class="material-icons">file_upload</i>
+                        </a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="upload{{person.id}}Person">
+                            Prześlij CV i/lub zdjęcie
+                        </div>
+                            
+                        <a id="edit{{person.id}}Person" href="{{ path ('person_admin_update', {'id': person.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                          <i class="material-icons">edit</i>
+                        </a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="edit{{person.id}}Person">
+                            Modyfikuj
+                        </div>
+                          
+                        <a id="del{{person.id}}Person" onclick="return confirm('Czy na pewno chcesz usunąć całkiem tą osobę z systemu?');" href="{{ path ('person_admin_delete', {'id': person.id}) }}" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                          <i class="material-icons">delete</i>
+                        </a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="del{{person.id}}Person">
+                            Usuń osobę
+                        </div>
+                    </td>
+                </tr>
+        {% else %}
+            <tr><td>Brak osób w tej grupie.</td></tr>
         {% endfor %}
+        </tbody>
+        
+    </table>
+    </div>
+                
+    <div class="w100 text-center mrg10a">
+        <a href="{{ path('person_admin_new') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <i class="material-icons">add</i> Dodaj nową osobę
+        </a>
+    </div>
     {% else %}
-        {{ error }}
+        <div class="info error"><i class="material-icons">warning</i> {{ error }}</div>
     {% endif %}
 {% endblock %}

@@ -41,3 +41,17 @@
 .mrg10a{
     margin:10px;
 }
+
+.avatar{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background-size: cover;
+    background-position: center center;
+    display: inline-block;
+}
+
+.responsive-table{
+    overflow-y: auto;
+    width:100%;
+}

@@ -22,7 +22,7 @@
       </header>
       <main class="mdl-layout__content">
         <div class="mdl-layout__tab-panel is-active" id="overview">
-          <section class="section--center mdl-grid mdl-shadow--2dp p800">
+          <section class="section--center mdl-grid mdl-shadow--2dp {% if (fullWidth is not defined) or (not fullWidth) %}p800{% endif %}">
               {% block content %} {% endblock %}
           </section>
         </div>
@@ -31,7 +31,6 @@
         </footer>
       </main>
     </div>
-    <a href="https://github.com/google/material-design-lite/blob/master/templates/text-only/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View Source</a>
     <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
   </body>
 </html>
