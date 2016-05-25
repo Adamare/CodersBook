@@ -294,11 +294,11 @@ class PersonController extends Controller {
         
         $persons = $repo->findBy(['clGroup' => $group]);
         
-        
-        
         $zip = new \ZipArchive();
         $zipName = $group->getName() . ".zip";
-        $zip->open($this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $zipName, \ZipArchive::CREATE);
+        $dir = $this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $zipName;
+        
+        $zip->open($dir, \ZipArchive::CREATE);
         foreach ($persons as $person) {
             if($person->getCvFN() == ''){
                 continue;
@@ -309,7 +309,7 @@ class PersonController extends Controller {
             $zip->addFromString($personCV, file_get_contents($file));
         }
         $zip->close();
-        $response = new BinaryFileResponse($this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $zipName);
+        $response = new BinaryFileResponse($dir);
         $response->headers->set('Content-Type', 'application/octet-stream');
 
 
