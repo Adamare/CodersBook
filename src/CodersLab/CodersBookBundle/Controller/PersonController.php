@@ -10,12 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use CodersLab\CodersBookBundle\Entity\Person;
 use CodersLab\CodersBookBundle\Entity\CLGroup;
 use Symfony\Component\HttpFoundation\Response;
-<<<<<<< HEAD
+
 use Symfony\Component\HttpFoundation\StreamedResponse;
-=======
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
->>>>>>> origin/master
 
 /**
  * @Route("/person")
