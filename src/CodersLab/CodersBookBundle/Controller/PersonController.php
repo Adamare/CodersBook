@@ -54,7 +54,7 @@ class PersonController extends Controller {
 
 
         $form = $this->createFormBuilder()
-                ->add('cv', 'file', ['label' => 'Twoje CV'])
+                ->add('cv', 'file', ['label' => 'Twoje CV', 'required' => false])
                 ->add('image', 'file', ['label' => 'Twoje zdjęcie', 'required' => false])
                 ->add('save', 'submit', ['label' => 'Wyślij plik'])
                 ->getForm();
